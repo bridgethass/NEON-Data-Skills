@@ -7,7 +7,7 @@ dateCreated: 2020-02-18
 description: Plot and comapre the spectral signatures of multiple different land cover types using an interactive click-to-extract interface to select pixels.
 estimatedTime: 0.5 - 1 Hours
 languagesTool: R
-dataProudct: DP3.30006.001, DP3.30006.002
+dataProduct: DP3.30006.001, DP3.30006.002
 packagesLibraries: rhdf5, terra, plyr, reshape2, ggplot2, neonUtilities
 authors: Donal O'Leary
 topics: hyperspectral, HDF5, remote-sensing

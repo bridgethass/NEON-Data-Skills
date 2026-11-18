@@ -9,7 +9,7 @@ estimatedTime: 1.0 - 1.5 Hours
 packagesLibraries: rhdf5, terra, neonUtilities
 topics: hyperspectral, HDF5, remote-sensing
 languagesTool: R
-dataProudct: DP3.30006.001
+dataProduct: DP3.30006.001
 code1: https://raw.githubusercontent.com/NEONScience/NEON-Data-Skills/main/tutorials/R/AOP/Hyperspectral/Raster-Stack-RGB/raster-stack-rgb.R
 tutorialSeries: intro-hsi-r-series
 urlTitle: create-raster-stack-hsi-hdf5-r

@@ -2,7 +2,7 @@
 syncID: 317ecab8e00b4a959a76dba181bb33b8
 title: "Download and work with NEON Aquatic Instrument Data"
 description: "Download NEON AIS data using the neonUtilities package and explore and interpret the downloaded data"
-dateUpdates: 2024-01-08
+dateUpdated: 2024-01-08
 authors: Bobby Hensley
 contributors: Guy Litt
 estimatedTime: 1.5 hours

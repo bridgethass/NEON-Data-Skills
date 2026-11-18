@@ -3,7 +3,7 @@ syncID: 884cc5915a3842c1ab6617b060797fab
 title: "Subsetting NEON HDF5 hyperspectral files to reduce file size"
 code1: https://raw.githubusercontent.com/NEONScience/NEON-Data-Skills/main/tutorials/R/R-skills/Using-hdf5-r/Subset-HDF5-hyperspectral/Subset-HDF5-hyperspectral.R
 contributors: Megan Jones
-dataProudct: DP3.30006.001, DP1.30006.001, DP1.30008.001, DP4.00200.001
+dataProduct: DP3.30006.001, DP1.30006.001, DP1.30008.001, DP4.00200.001
 dateCreated: 2020-02-04
 description: Take a large NEON hyperspectral HDF5 file and extract only the information that you need, then save as a new HDF5 file. For an example, we will take an existing hyperspectral dataset (~600Mb) and reduce it in size for subsequent tutorials.
 estimatedTime: 1.0 Hour

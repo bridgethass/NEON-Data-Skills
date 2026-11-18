@@ -1,10 +1,10 @@
 ---
 syncID: 1c45b4a12e2a47f081c86f167059fad5
-title: "Raster 04: Work With Multi-Band Rasters - Image Data in R"	
-description: "Import and plot each band and all bands of a three-band raster in R."	
+title: "Raster 04: Work With Multi-Band Rasters - Image Data in R"  
+description: "Import and plot each band and all bands of a three-band raster in R."  
 dateCreated: 2015-10-23
-authors: Leah A. Wasser, Megan A. Jones, Zack Brym, Kristina Riemer, Jason Williams, Jeff Hollister,  Mike Smorul	
-contributors:	Jason Brown, Bridget Hass
+authors: Leah A. Wasser, Megan A. Jones, Zack Brym, Kristina Riemer, Jason Williams, Jeff Hollister,  Mike Smorul  
+contributors:  Jason Brown, Bridget Hass
 estimatedTime: 1 hour
 packagesLibraries: terra, neonUtilities, RColorBrewer
 topics: data-viz, raster, spatial-data-gis, camera-imagery

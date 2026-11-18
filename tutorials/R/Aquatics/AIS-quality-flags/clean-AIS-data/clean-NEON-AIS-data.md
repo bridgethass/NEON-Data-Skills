@@ -2,7 +2,7 @@
 syncID: 850bea0fe3bd4c2f86ecd51eb966e54e
 title: "Cleaning and Gap-Filling NEON Aquatic Instrument Data"
 description: Tutorial for Cleaning NEON Level 1 AIS data
-dateUpdates: 2024-08-27
+dateUpdated: 2024-08-27
 authors: Bobby Hensley
 contributors: 
 dataProducts: DP1.20288.001, DP1.20033.001

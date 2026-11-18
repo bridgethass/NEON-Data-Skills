@@ -9,7 +9,7 @@ estimatedTime: 0.5 hours
 packagesLibraries: h5py, gdal, requests
 topics: hyperspectral, HDF5, remote-sensing, vegetation-index
 languagesTool: Python
-dataProduct: DP3.30006.001, DP3.3006.002
+dataProduct: DP3.30006.001, DP3.30006.002
 code1: https://raw.githubusercontent.com/NEONScience/NEON-Data-Skills/main/tutorials/Python/AOP/Hyperspectral/intro-hyperspectral/ndvi-spectra-masks/calc_ndvi_extract_spectra.ipynb
 tutorialSeries: intro-hsi-py-series
 urlTitle: calc-refl-ndvi-py

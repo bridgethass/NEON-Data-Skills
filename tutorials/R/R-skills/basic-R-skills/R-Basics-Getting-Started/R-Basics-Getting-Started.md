@@ -7,7 +7,7 @@ dateCreated: '2014-11-04'
 description: This tutorial presents the basics of using R.
 estimatedTime: 30 minutes
 languagesTool: R
-packagesLibaries: 
+packagesLibraries: 
 syncID: 8346bef7292b46a09a76a0171b05662c
 authors: Leah A. Wasser - Adapted from Software Carpentry
 topics: data-analysis

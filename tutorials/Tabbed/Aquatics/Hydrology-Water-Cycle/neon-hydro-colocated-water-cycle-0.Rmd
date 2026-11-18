@@ -1,7 +1,7 @@
 ---
 syncID: 8dba6493e148496c9402489c43873bf4
-title: "NEON-CUAHSI Data Skills Demo: Exploring the Water Cycle at Co-Located Terrestrial-Aquatic Sites"	
-description: Hands-on data skills demo on how to download, explore, manipulate, and visualize NEON hydrology data at co-located terrestrial and aquatic sites. Presented in collaboration with the CUAHSI cyberseminar series on April 1, 2026.	
+title: "NEON-CUAHSI Data Skills Demo: Exploring the Water Cycle at Co-Located Terrestrial-Aquatic Sites"  
+description: Hands-on data skills demo on how to download, explore, manipulate, and visualize NEON hydrology data at co-located terrestrial and aquatic sites. Presented in collaboration with the CUAHSI cyberseminar series on April 1, 2026.  
 dateCreated: 2026-03-19
 authors: Zachary L. Nickerson
 contributors: Nicolas M. Harrison

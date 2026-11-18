@@ -6,7 +6,7 @@ dateCreated: 2018-04-19
 authors: Megan A. Jones
 contributors: Garrett M. Williams
 estimatedTime: 20 minutes
-packagesLibaries:
+packagesLibraries:
 topics: data-management
 languagesTool: R
 dataProduct:
