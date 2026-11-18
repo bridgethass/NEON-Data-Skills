@@ -1,0 +1,31 @@
+# Canonical Language / Tool vocabulary.
+# Source keys merged: languagesTool, languageTool, languageTools, language.
+# Matching is case-insensitive against name + aliases. If a tutorial has no
+# language value, it is inferred from its top-level folder (see `folder_defaults`).
+
+languages:
+  - name: R
+  - name: Python
+  - name: GEE
+    aliases: [google earth engine, google-earth-engine, gee]
+  - name: JavaScript
+  - name: NEON API
+    aliases: [api]
+  - name: Git
+  - name: Bash
+  - name: HDFView
+  - name: QGIS
+  - name: Docker
+  - name: Google Cloud
+    aliases: [google cloud storage, gcp]
+  - name: Spreadsheet
+
+# Values that are packages, not languages/tools.
+drop: [plotly]
+
+folder_defaults:
+  R: [R]
+  Python: [Python]
+  GEE/JavaScript: [GEE, JavaScript]
+  GEE/Python: [GEE, Python]
+  Tabbed: [R, Python]

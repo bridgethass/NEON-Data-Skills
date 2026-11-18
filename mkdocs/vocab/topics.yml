@@ -1,0 +1,88 @@
+# Canonical topic vocabulary for the MkDocs site.
+# Each source `topics:` / `subtopics:` value in tutorial front matter is lower-cased,
+# stripped of quotes, and matched against `slug` and `aliases` (spaces/underscores
+# are treated as hyphens). Unmatched values are listed in the build report.
+# Map a value to `null` under `drop:` to silently discard it (e.g. it belongs in another facet).
+
+topics:
+  - slug: remote-sensing
+    name: Remote Sensing
+  - slug: hyperspectral
+    name: Hyperspectral
+    aliases: [hyperspectral-remote-sensing, reflectance, brdf]
+  - slug: lidar
+    name: Lidar
+    aliases: [point-cloud, elevation, hillshade, canopy-height, canopy-height-model]
+  - slug: camera-imagery
+    name: Camera Imagery
+    aliases: [camera]
+  - slug: phenology
+    name: Phenology
+  - slug: raster
+    name: Raster Data
+    aliases: [geotiff, cloud-optimized-geotiff]
+  - slug: vector-data
+    name: Vector Data
+  - slug: spatial-data-gis
+    name: Spatial Data & GIS
+  - slug: hdf5
+    name: HDF5
+  - slug: time-series
+    name: Time Series
+    aliases: [timeseries, timeseries-visualization]
+  - slug: data-management
+    name: Data Management
+    aliases: [data-download, api]
+  - slug: metadata
+    name: Metadata
+  - slug: data-analysis
+    name: Data Analysis
+    aliases: [data-manipulation, table-joining]
+  - slug: data-viz
+    name: Data Visualization
+    aliases: [data-visualization]
+  - slug: classification
+    name: Classification
+  - slug: modeling-forecasting
+    name: Modeling & Forecasting
+    aliases: [model, modeling, ecological-forecasting]
+  - slug: uncertainty
+    name: Uncertainty
+  - slug: rep-sci
+    name: Reproducible Science
+    aliases: [reproducible-science]
+  - slug: organisms
+    name: Organismal Data
+    aliases: [beetles, morphology]
+  - slug: samples-specimens
+    name: Samples & Specimens
+    aliases: [biorepository, samples, specimens]
+  - slug: vegetation-structure
+    name: Vegetation Structure
+    aliases: [ecosystem-structure, canopy, woody-vegetation, vegetation, biomass]
+  - slug: foliar-traits
+    name: Foliar Traits & Canopy Chemistry
+    aliases: [canopy-nitrogen, nitrogen]
+  - slug: vegetation-indices
+    name: Vegetation Indices
+    aliases: [ndvi, vegetation-index]
+  - slug: meteorology
+    name: Meteorology
+    aliases: [micrometeorology, precipitation]
+  - slug: eddy-covariance
+    name: Eddy Covariance & Flux
+    aliases: [eddy-flux, carbon]
+  - slug: soils
+    name: Soils
+    aliases: [soil-temperature, soil-moisture, soil-microbial-biomass, soil-co2-concentration, soil-respiration]
+  - slug: hydrology
+    name: Hydrology
+    aliases: [stream-discharge, continuous-discharge, water-cycle, groundwater, discharge, aquatic]
+  - slug: water-chemistry
+    name: Water Chemistry
+    aliases: [chemistry]
+  - slug: macrosystems
+    name: Macrosystems Ecology
+
+# Values that belong to other facets (language, system) and are not topics.
+drop: [r, aop, google-earth-engine-gee, '']

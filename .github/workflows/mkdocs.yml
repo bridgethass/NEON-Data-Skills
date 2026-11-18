@@ -1,0 +1,73 @@
+# Build the MkDocs tutorial site (mkdocs/) and deploy it to GitHub Pages.
+# Pages must be enabled with Source = "GitHub Actions" (Settings > Pages), and the
+# github-pages environment must allow deployments from the branch this runs on.
+name: Deploy MkDocs tutorial site
+
+on:
+  push:
+    branches:
+      - mkdocs-site
+    paths:
+      - "mkdocs/**"
+      - "tutorials/**/*.md"
+      - ".github/workflows/mkdocs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (only what the site needs; the full repo is several GB)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /mkdocs/
+            /tutorials/**/*.md
+            /tutorials/**/*.Rmd
+            /tutorials/**/*.ipynb
+            /tutorials/**/*.png
+            /tutorials/**/*.jpg
+            /tutorials/**/*.gif
+            /tutorials/**/*.svg
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r mkdocs/requirements.txt
+
+      - name: Generate docs
+        run: python mkdocs/build_docs.py
+
+      - name: Build site
+        env:
+          NO_MKDOCS_2_WARNING: "1"
+        run: mkdocs build -f mkdocs/mkdocs.yml
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: mkdocs/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

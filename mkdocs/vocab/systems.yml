@@ -1,0 +1,17 @@
+# NEON data-collection systems. A tutorial's system is derived from its data products:
+# vocab/data_products.yml (fetched from the NEON API with --refresh-products) maps each
+# product's science team to a system (AOP -> AOP; TOS/AOS -> OS; TIS/AIS -> IS).
+# Unknown products fall back to the product-number digit (3xxxx AOP, 1xxxx OS, 0xxxx IS).
+# Two or more systems -> Combined; no data products -> General.
+# Override per tutorial with the `system_override` column in tutorial_meta.csv.
+systems:
+  - slug: AOP
+    name: AOP — Airborne Observation Platform
+  - slug: OS
+    name: OS — Observational Sampling
+  - slug: IS
+    name: IS — Instrumented Sampling
+  - slug: Combined
+    name: Combined — Multiple Systems
+  - slug: General
+    name: General — Not System-Specific

@@ -1,0 +1,9 @@
+# Paths (relative to tutorials/, glob syntax, forward slashes) to leave out of the site.
+exclude:
+  - README.md
+  - TOC-by-*.md
+  - TUTORIAL-CATALOG-AND-GAP-ANALYSIS.md
+  - Other/Concept-intros/test_tabs*/**
+  - Other/Concept-intros/testing*/**
+  - "**/.ipynb_checkpoints/**"
+  - "**/anaconda_projects/**"

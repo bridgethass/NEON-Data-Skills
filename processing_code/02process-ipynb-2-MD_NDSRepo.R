@@ -1,3 +1,7 @@
+## NOTE (2026): processing_code/nb2md.py is a cross-platform Python replacement for this
+## script (no hard-coded paths; handles all figure types; checks front matter).
+##   python processing_code/nb2md.py <notebook-or-folder>   (see --help)
+
 ## convert python-based tutorial .ipynb files to 
 ## .md, .py, .html files, make figures, and 
 ## update URLs to figures in the .md file

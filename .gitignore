@@ -103,3 +103,8 @@ ENV/
 .ropeproject
 
 /tutorials-in-development/R/aquatics/cuahsi-neon-webinar/neon_env
+
+# MkDocs site (generated)
+mkdocs/docs/
+mkdocs/site/
+mkdocs/.venv/

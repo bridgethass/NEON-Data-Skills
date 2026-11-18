@@ -1,0 +1,8 @@
+# Skill level vocabulary. Assigned per tutorial in mkdocs/tutorial_meta.csv (column `skill_level`).
+skill_levels:
+  - slug: intro
+    name: Intro
+  - slug: intermediate
+    name: Intermediate
+  - slug: advanced
+    name: Advanced

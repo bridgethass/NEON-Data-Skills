@@ -1,0 +1,20 @@
+# Workflow / Task type vocabulary. Assigned per tutorial in mkdocs/tutorial_meta.csv
+# (column `task_types`, semicolon-separated slugs). `keywords` are only used by
+# `build_docs.py --init-meta` to guess initial values from title + description.
+
+task_types:
+  - slug: download-access
+    name: Download / Access Data
+    keywords: [download, access, api, token, neonutilities, neonutilities, stack, load data, read in, import]
+  - slug: explore-visualize
+    name: Explore / Visualize
+    keywords: [plot, visualiz, explore, map, view, interactive, intro, introduction, overview]
+  - slug: subset-reformat
+    name: Subset / Reformat
+    keywords: [subset, crop, mosaic, merge, reproject, convert, reformat, extract, mask, clip, stack, join, tidy]
+  - slug: analyze-model
+    name: Analyze / Model
+    keywords: [classif, model, calculat, regression, random forest, statistic, forecast, analy, predict, biomass, compare]
+  - slug: uncertainty-validation
+    name: Uncertainty / Validation
+    keywords: [uncertainty, validation, accuracy, error, quality, qa]
