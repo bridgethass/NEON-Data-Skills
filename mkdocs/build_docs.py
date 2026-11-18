@@ -15,6 +15,7 @@ Usage (from the repo root):
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import fnmatch
 import html
@@ -46,6 +47,10 @@ META_FIELDS = [
     "path", "sync_id", "title", "url_title", "theme", "subtheme",
     "task_types", "skill_level", "system_override", "reviewed", "notes",
 ]
+
+SYSTEM_ICONS = {"AOP": ":material-airplane:", "IS": ":material-transmission-tower:", "OS": ":material-leaf:"}
+# display labels for top-level tutorial folders in the navigation
+NAV_LABELS = {"Tabbed": "R & Python", "GEE": "Google Earth Engine"}
 
 FM_RE = re.compile(r"\A﻿?---[ \t]*\r?\n(.*?)\r?\n---[ \t]*\r?\n", re.S)
 DP_RE = re.compile(r"DP([1-4])\.(\d{5})(?:\.(\d{3}))?")
@@ -110,7 +115,6 @@ def load_vocab() -> Vocab:
     if pfile.exists():
         for p in load_yaml(pfile).get("products", []) or []:
             products[p["code"]] = p
-            products.setdefault(p["code"][:9], p)  # revision-less lookup
 
     return Vocab(
         topics=topics,
@@ -224,6 +228,7 @@ class Report:
         self.unknown_topics: Counter = Counter()
         self.unknown_langs: Counter = Counter()
         self.unknown_products: Counter = Counter()
+        self.no_revision: Counter = Counter()
         self.stale: list[str] = []
 
 
@@ -282,18 +287,24 @@ def normalize(t: Tutorial, vocab: Vocab, rep: Report) -> None:
     prods, seen = [], set()
     for m in DP_RE.finditer(raw_dp):
         base = f"DP{m.group(1)}.{m.group(2)}"
-        code = f"{base}.{m.group(3)}" if m.group(3) else base
-        if base in seen:
+        if m.group(3):
+            code = f"{base}.{m.group(3)}"
+        else:
+            # no revision given: assume .001, or the only revision that exists
+            revs = sorted(c for c in vocab.products if c.startswith(base + "."))
+            code = f"{base}.001" if f"{base}.001" in revs else (revs[0] if len(revs) == 1 else base)
+            rep.no_revision[f"{base} -> {code}"] += 1
+        if code in seen:
             continue
-        seen.add(base)
-        info = vocab.products.get(code) or vocab.products.get(base)
+        seen.add(code)
+        info = vocab.products.get(code)
         if info:
-            prods.append({"code": base, "name": info["name"], "system": info["system"], "team": info.get("team", "")})
+            prods.append({"code": code, "name": info["name"], "system": info["system"], "team": info.get("team", "")})
         else:
             rep.unknown_products[code] += 1
             digit = m.group(2)[0]
             sysguess = {"3": "AOP", "1": "OS", "0": "IS"}.get(digit, "General")
-            prods.append({"code": base, "name": "", "system": sysguess, "team": ""})
+            prods.append({"code": code, "name": "", "system": sysguess, "team": ""})
     leftover = DP_RE.sub("", raw_dp).replace("NEON.", "")
     for junk in re.findall(r"DP\S+", leftover):
         rep.unknown_products[junk] += 1
@@ -510,11 +521,100 @@ def card_html(t: Tutorial, vocab: Vocab) -> str:
     )
 
 
+HTML_PRESERVE_RE = re.compile(r"<!--html_preserve-->(.*?)<!--/html_preserve-->", re.S)
+HEADING_TAGS = ["h1", "h2", "h3", "h4", "h5", "h6"]
+PRE_LEXERS = {"r": "r", "python": "python", "py": "python", "bash": "bash", "sh": "bash"}
+
+
+def convert_rmd_html(fragment: str, page_stem: str, dest_dir: Path, counter: list[int]) -> str:
+    """Make an rmarkdown HTML fragment (the 'Tabbed' tutorials' includeHTML output)
+    render natively in MkDocs Material:
+      - rmarkdown `.tabset` sections -> Material tabbed blocks (pymdownx.tabbed markup)
+      - <pre class="r|python"><code> -> Pygments-highlighted Material code blocks
+      - base64 data: images -> image files next to the page
+    """
+    from bs4 import BeautifulSoup
+    from pygments import highlight
+    from pygments.formatters import HtmlFormatter
+    from pygments.lexers import get_lexer_by_name
+
+    soup = BeautifulSoup(fragment, "html.parser")
+
+    # 1. inline base64 images -> files
+    for img in soup.find_all("img", src=re.compile(r"^data:image/")):
+        m = re.match(r"data:image/([a-z+]+);base64,(.*)", img["src"], re.S)
+        if not m:
+            continue
+        ext = {"svg+xml": "svg", "jpeg": "jpg"}.get(m.group(1), m.group(1))
+        counter[1] += 1
+        name = f"{page_stem}_img/img-{counter[1]}.{ext}"
+        target = dest_dir / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(base64.b64decode(m.group(2)))
+        img["src"] = "../" + name  # page is served at <stem>/ (use_directory_urls)
+
+    # 2. highlight code blocks
+    fmt = HtmlFormatter(nowrap=True)
+    for pre in soup.find_all("pre", class_=True):
+        lang = next((PRE_LEXERS[c] for c in pre.get("class", []) if c in PRE_LEXERS), None)
+        if not lang:
+            continue
+        code = pre.get_text()
+        hl = highlight(code, get_lexer_by_name(lang), fmt)
+        new = BeautifulSoup(
+            f'<div class="language-{lang} highlight"><pre><span></span><code>{hl}</code></pre></div>', "html.parser")
+        pre.replace_with(new)
+
+    # 3. empty headings from rmarkdown `## {-}` tabset terminators
+    for h in soup.find_all(HEADING_TAGS):
+        if not h.get_text(strip=True):
+            h.decompose()
+
+    # 4. tabsets (reverse document order = nested tabsets first)
+    for ts in reversed(soup.find_all("div", class_="tabset")):
+        sections = [c for c in ts.find_all("div", class_="section", recursive=False)]
+        if not sections:
+            continue
+        counter[0] += 1
+        n = counter[0]
+        labels, blocks = [], []
+        for k, sec in enumerate(sections, 1):
+            h = sec.find(HEADING_TAGS)
+            label = h.get_text(strip=True) if h else f"Tab {k}"
+            if h:
+                h.decompose()
+            labels.append(label)
+            blocks.append(sec.decode_contents())
+            sec.decompose()
+        inputs = "".join(
+            '<input{} id="__tabbed_{n}_{k}" name="__tabbed_{n}" type="radio"/>'.format(
+                ' checked="checked"' if k == 1 else "", n=n, k=k)
+            for k in range(1, len(labels) + 1))
+        label_html = "".join(f'<label for="__tabbed_{n}_{k}">{html.escape(lb)}</label>' for k, lb in enumerate(labels, 1))
+        block_html = "".join(f'<div class="tabbed-block">{b}</div>' for b in blocks)
+        tabbed = BeautifulSoup(
+            f'<div class="tabbed-set tabbed-alternate" data-tabs="{n}:{len(labels)}">{inputs}'
+            f'<div class="tabbed-labels">{label_html}</div><div class="tabbed-content">{block_html}</div></div>',
+            "html.parser")
+        ts.append(tabbed)
+        ts["class"] = [c for c in ts["class"] if c != "tabset"]
+        for h in ts.find_all(HEADING_TAGS, class_="tabset", recursive=False):
+            h["class"] = [c for c in h["class"] if c != "tabset"] or None
+            if not h["class"]:
+                del h["class"]
+    return str(soup)
+
+
 def write_page(t: Tutorial, vocab: Vocab) -> None:
     body = t.body
-    if t.source_kind == "rmd" or (t.path.startswith("R/") and "```" not in body):
+    if "html_preserve" not in body and (t.source_kind == "rmd" or (t.path.startswith("R/") and "```" not in body)):
         body = fence_indented_code(body)
     body = fix_links(body)
+    if "<!--html_preserve-->" in body:
+        dest_dir = (OUT / t.path).parent
+        counter = [1000, 0]
+        stem = PurePosixPath(t.path).stem
+        body = HTML_PRESERVE_RE.sub(lambda m: convert_rmd_html(m.group(1), stem, dest_dir, counter), body)
     new_fm = {
         "title": t.title,
         "description": t.description,
@@ -646,7 +746,7 @@ def write_browse(tuts: list[Tutorial], vocab: Vocab) -> None:
             count = len({id(t) for v in prod_map.values() for t, _ in v} | {id(t) for t in no_prod})
             if not count:
                 continue
-            lines += [f"## {sysname} ({count})", ""]
+            lines += [f"## {SYSTEM_ICONS[sysslug]} {sysname} ({count}) {{ #{sysslug.lower()} }}", ""]
             for code in sorted(prod_map):
                 name = prod_map[code][0][1]["name"]
                 lines += [f"### {code}{' — ' + name if name else ''}", ""]
@@ -659,7 +759,7 @@ def write_browse(tuts: list[Tutorial], vocab: Vocab) -> None:
         else:
             if not members:
                 continue
-            lines += [f"## {sysname} ({len(members)})", ""]
+            lines += [f"## {sysname} ({len(members)}) {{ #{sysslug.lower()} }}", ""]
             lines += [item_line(t, vocab) for t in sorted(members, key=lambda x: x.title.lower())]
             lines.append("")
     (OUT / "browse" / "systems.md").write_text("\n".join(lines), encoding="utf-8")
@@ -701,6 +801,8 @@ def write_browse(tuts: list[Tutorial], vocab: Vocab) -> None:
 
 
 def humanize(name: str) -> str:
+    if name in NAV_LABELS:
+        return NAV_LABELS[name]
     s = re.sub(r"^\d+[-_.]?\s*(?=[A-Za-z])", "", name)  # leading "1-", "01_"
     s = s.replace("_", " ").replace("-", " ").strip()
     return s[:1].upper() + s[1:] if s else name
@@ -749,7 +851,7 @@ def write_nav(tuts: list[Tutorial]) -> None:
     ]
     for top in ["Python", "R", "GEE", "Tabbed", "Other"]:
         if top in tree:
-            nav.append({top: tree_to_nav(tree.pop(top))})
+            nav.append({humanize(top): tree_to_nav(tree.pop(top))})
     for top in sorted(tree):  # anything else
         val = tree[top]
         nav.append({val.title: val.path} if isinstance(val, Tutorial) else {humanize(top): tree_to_nav(val)})
@@ -970,6 +1072,8 @@ def build(tuts: list[Tutorial], vocab: Vocab, rep: Report, with_stale: bool) -> 
     section("Unknown languages (add to vocab/languages.yml)",
             [f"{k!r} x{v}" for k, v in rep.unknown_langs.most_common()])
     section("Unrecognized data product IDs", [f"{k!r} x{v}" for k, v in rep.unknown_products.most_common()])
+    section("Data product IDs without a revision (assumed; add the revision in front matter)",
+            [f"{k} x{v}" for k, v in sorted(rep.no_revision.items())])
     section("Not in tutorial_meta.csv", [t.path for t in tuts if t.path not in matched] if rows else [])
     section("Orphaned tutorial_meta.csv rows", [r["path"] for r in orphans])
     missing = Counter()

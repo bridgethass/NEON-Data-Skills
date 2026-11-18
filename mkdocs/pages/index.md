@@ -29,6 +29,30 @@ Self-paced tutorials for finding, downloading, exploring and analyzing data from
 
 </div>
 
+## Browse by NEON system
+
+<div class="grid cards" markdown>
+
+-   :material-airplane: **[Airborne Observation Platform (AOP)](browse/systems.md#aop)**
+
+    Airborne lidar, hyperspectral imaging spectrometer and RGB camera data.
+
+    [Filter these tutorials](browse/index.md?system=AOP)
+
+-   :material-transmission-tower: **[Instrumented Systems (IS)](browse/systems.md#is)**
+
+    Continuous sensor data from towers, soil plots and aquatic sites.
+
+    [Filter these tutorials](browse/index.md?system=IS)
+
+-   :material-leaf: **[Observational Systems (OS)](browse/systems.md#os)**
+
+    Field sampling of organisms, vegetation, soils and water.
+
+    [Filter these tutorials](browse/index.md?system=OS)
+
+</div>
+
 ## Other ways to browse
 
 - [By Topic](browse/topics.md)

@@ -1,3 +1,63 @@
+/* ===================== NEON branding (colors from neonscience.org) =====================
+   blue #0073CF (links, primary)   light blue #0092E2 (hover/accent)   navy #002C77 (headings, footer)
+   grays #565A5C / #D7D9D9 / #F5F6F7                                   green #1A936F                   */
+:root > * {
+  --neon-blue: #0073CF;
+  --neon-blue-light: #0092E2;
+  --neon-navy: #002C77;
+  --neon-gray: #565A5C;
+  --neon-border: #D7D9D9;
+  --neon-bg-light: #F5F6F7;
+  --md-primary-fg-color: var(--neon-blue);
+  --md-primary-fg-color--light: var(--neon-blue-light);
+  --md-primary-fg-color--dark: var(--neon-navy);
+  --md-accent-fg-color: var(--neon-blue-light);
+  --md-accent-fg-color--transparent: rgba(0, 146, 226, 0.1);
+  --md-typeset-a-color: var(--neon-blue);
+}
+[data-md-color-scheme="slate"] {
+  --md-hue: 215;
+  --md-typeset-a-color: #5AB4F5;
+  --md-accent-fg-color: #7CC4F8;
+}
+
+/* light mode: white header + tabs like neonscience.org */
+[data-md-color-scheme="default"] .md-header,
+[data-md-color-scheme="default"] .md-tabs { background-color: #fff; color: var(--neon-navy); }
+[data-md-color-scheme="default"] .md-header { box-shadow: none; border-bottom: 1px solid var(--neon-border); }
+[data-md-color-scheme="default"] .md-header--shadow { box-shadow: 0 0 .2rem rgba(0,0,0,.1), 0 .2rem .4rem rgba(0,0,0,.1); }
+[data-md-color-scheme="default"] .md-tabs { border-bottom: 1px solid var(--neon-border); }
+[data-md-color-scheme="default"] .md-tabs__link { opacity: 1; color: var(--neon-gray); }
+[data-md-color-scheme="default"] .md-tabs__link:hover,
+[data-md-color-scheme="default"] .md-tabs__item--active .md-tabs__link { color: var(--neon-blue); }
+.md-tabs__item--active .md-tabs__link { font-weight: 600; }
+[data-md-color-scheme="default"] .md-search__form { background-color: var(--neon-bg-light); }
+[data-md-color-scheme="default"] .md-search__form:hover { background-color: #EAECED; }
+[data-md-color-scheme="default"] .md-search__input,
+[data-md-color-scheme="default"] .md-search__icon { color: var(--neon-navy); }
+[data-md-color-scheme="default"] .md-search__input::placeholder { color: var(--neon-gray); }
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__title[for="__drawer"] { background-color: #fff; color: var(--neon-navy); }
+[data-md-color-scheme="default"] .md-typeset h1,
+[data-md-color-scheme="default"] .md-typeset h2 { color: var(--neon-navy); }
+
+/* dark mode: navy header with the white logo */
+[data-md-color-scheme="slate"] .md-header,
+[data-md-color-scheme="slate"] .md-tabs { background-color: var(--neon-navy); color: #fff; }
+[data-md-color-scheme="slate"] .md-logo img { content: url("../assets/neon-logo-white.svg"); }
+
+/* logo is wide (~2.6:1) */
+.md-header__button.md-logo { padding: .2rem .4rem; }
+.md-header__button.md-logo img, .md-header__button.md-logo svg { height: 2rem; width: auto; }
+.md-nav__title .md-nav__button.md-logo img { height: 2.4rem; width: auto; }
+
+/* footer navy like neonscience.org */
+.md-footer { background-color: var(--neon-navy); }
+.md-footer-meta { background-color: #001F55; }
+
+/* icons inside headings / cards */
+.md-typeset .twemoji svg { fill: var(--neon-blue); }
+[data-md-color-scheme="slate"] .md-typeset .twemoji svg { fill: #5AB4F5; }
+
 /* ---------- tutorial card (metadata header on each tutorial page) ---------- */
 .nds-card {
   border: 1px solid var(--md-default-fg-color--lightest);
@@ -26,10 +86,10 @@
   background: var(--md-default-fg-color--lightest);
 }
 .md-typeset a.nds-chip:hover { border-color: var(--md-accent-fg-color); }
-.nds-chip--lang   { background: #e0f2f1 !important; color: #00695c !important; }
-.nds-chip--system { background: #e3f2fd !important; color: #1565c0 !important; }
-.nds-chip--skill  { background: #fff3e0 !important; color: #e65100 !important; }
-.nds-chip--task   { background: #f3e5f5 !important; color: #6a1b9a !important; }
+.nds-chip--lang   { background: #E6F1FA !important; color: #0073CF !important; }
+.nds-chip--system { background: #E5EAF3 !important; color: #002C77 !important; }
+.nds-chip--skill  { background: #E3F4EE !important; color: #1A936F !important; }
+.nds-chip--task   { background: #F5F6F7 !important; color: #565A5C !important; border-color: #D7D9D9 !important; }
 [data-md-color-scheme="slate"] .nds-chip--lang,
 [data-md-color-scheme="slate"] .nds-chip--system,
 [data-md-color-scheme="slate"] .nds-chip--skill,
@@ -46,7 +106,7 @@
   margin: 1rem 0;
   border-radius: 4px;
 }
-.md-typeset #ds-challenge, .md-typeset .ds-challenge { border-left-color: #ef6c00; }
+.md-typeset #ds-challenge, .md-typeset .ds-challenge { border-left-color: #1A936F; }
 
 /* ---------- filter page ---------- */
 .nds-filter-controls {
