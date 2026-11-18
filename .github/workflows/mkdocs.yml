@@ -56,10 +56,13 @@ jobs:
           NO_MKDOCS_2_WARNING: "1"
         run: mkdocs build -f mkdocs/mkdocs.yml
 
+      # Name the artifact per attempt: "Re-run jobs" keeps earlier attempts' artifacts in the
+      # same run, and deploy-pages fails if it finds more than one with the same name.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: mkdocs/site
+          name: github-pages-${{ github.run_attempt }}
 
   deploy:
     needs: build
@@ -71,3 +74,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
